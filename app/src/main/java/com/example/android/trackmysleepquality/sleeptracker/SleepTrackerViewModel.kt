@@ -42,13 +42,13 @@ class SleepTrackerViewModel(
 
     private val nights = database.getAllNights()
 
-    private val _navigateToSleepQuality = MutableLiveData<SleepNight>()
+    private val _navigateToSleepTracker = MutableLiveData<Boolean?>()
 
-    val navigateToSleepQuality: LiveData<SleepNight>
-        get() = _navigateToSleepQuality
+    val navigateToSleepTracker: LiveData<Boolean?>
+        get() = _navigateToSleepTracker
 
     fun doneNavigating() {
-        _navigateToSleepQuality.value = null
+        _navigateToSleepTracker.value = null
     }
 
     private suspend fun insert(night: SleepNight) {
