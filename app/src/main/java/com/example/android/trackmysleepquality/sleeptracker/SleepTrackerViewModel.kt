@@ -36,19 +36,17 @@ class SleepTrackerViewModel(
         application: Application) : AndroidViewModel(application) {
     private var viewModelJob = Job()
 
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private var tonight = MutableLiveData<SleepNight?>()
 
     private val nights = database.getAllNights()
 
-    private val _navigateToSleepTracker = MutableLiveData<Boolean?>()
+    private val _navigateToSleepQuality = MutableLiveData<SleepNight>()
 
-    val navigateToSleepTracker: LiveData<Boolean?>
-        get() = _navigateToSleepTracker
+    val navigateToSleepQuality: LiveData<SleepNight>
+        get() = _navigateToSleepQuality
 
     fun doneNavigating() {
-        _navigateToSleepTracker.value = null
+        _navigateToSleepQuality.value = null
     }
 
     private suspend fun insert(night: SleepNight) {
@@ -67,6 +65,9 @@ class SleepTrackerViewModel(
         }
     }
 
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
+    private var tonight = MutableLiveData<SleepNight?>()
     init {
         initializeTonight()
     }
@@ -87,6 +88,7 @@ class SleepTrackerViewModel(
     val nightsString = Transformations.map(nights) { nights ->
         formatNights(nights, application.resources)
     }
+
     private suspend fun update(night: SleepNight) {
         withContext(Dispatchers.IO) {
             database.update(night)
